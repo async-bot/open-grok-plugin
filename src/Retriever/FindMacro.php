@@ -34,9 +34,7 @@ final class FindMacro
 
             $searchResults = (new ParseSearchResults())->parse($response);
 
-            $searchResults->filterByType(MacroDefinition::class);
-
-            return $searchResults;
+            return $searchResults->filterByType(MacroDefinition::class);
         });
     }
 }

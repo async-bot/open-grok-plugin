@@ -28,8 +28,7 @@ final class FindMethod
     {
         return call(function () use ($methodName) {
             $methodName = sprintf('"%s"', $methodName);
-var_dump(urlencode($methodName));
-var_dump(sprintf(self::SEARCH_URL, urlencode($methodName)));
+
             $response = yield $this->httpClient->requestJson(
                 sprintf(self::SEARCH_URL, urlencode($methodName)),
                 new SearchResultResponse(),
@@ -37,9 +36,7 @@ var_dump(sprintf(self::SEARCH_URL, urlencode($methodName)));
 
             $searchResults = (new ParseSearchResults())->parse($response);
 
-            $searchResults->filterByType(MethodDefinition::class);
-
-            return $searchResults;
+            return $searchResults->filterByType(MethodDefinition::class);
         });
     }
 }

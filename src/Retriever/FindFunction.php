@@ -34,9 +34,7 @@ final class FindFunction
 
             $searchResults = (new ParseSearchResults())->parse($response);
 
-            $searchResults->filterByType(FunctionDefinition::class);
-
-            return $searchResults;
+            return $searchResults->filterByType(FunctionDefinition::class);
         });
     }
 }
