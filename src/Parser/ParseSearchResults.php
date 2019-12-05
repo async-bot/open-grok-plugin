@@ -6,6 +6,7 @@ use AsyncBot\Plugin\OpenGrok\Collection\SearchResults;
 use AsyncBot\Plugin\OpenGrok\ValueObject\FunctionDefinition;
 use AsyncBot\Plugin\OpenGrok\ValueObject\MacroDefinition;
 use AsyncBot\Plugin\OpenGrok\ValueObject\MethodDefinition;
+use AsyncBot\Plugin\OpenGrok\ValueObject\Unclassified;
 
 final class ParseSearchResults
 {
@@ -46,6 +47,6 @@ final class ParseSearchResults
             return FunctionDefinition::fromLine($fileName, $line);
         }
 
-        return null;
+        return Unclassified::fromLine($fileName, $line);
     }
 }
