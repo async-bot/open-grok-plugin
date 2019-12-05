@@ -4,9 +4,9 @@ namespace AsyncBot\Plugin\OpenGrok\ValueObject;
 
 final class MethodDefinition extends SearchResult
 {
-    private const PATTERN = '~/\* {{{ proto (?P<visibility>[^ ]+) (?P<returnType>[^ ]+) (?P<className>[^:]+)::<b>(?P<methodName>[^<]+)</b>\((?P<parameters>.*)\)~';
+    private const PATTERN = '~/\* {{{ proto (?:(?P<visibility>[^ ]+) )?(?P<returnType>[^ ]+) (?:<b>)?(?P<className>[^:]+)(?:</b>)?::(?:<b>)?(?P<methodName>[^<]+)(?:</b>)?\((?P<parameters>.*)\)~';
 
-    private string $visibility;
+    private ?string $visibility;
 
     private string $returnType;
 
@@ -14,18 +14,17 @@ final class MethodDefinition extends SearchResult
 
     private string $method;
 
-    /** @var array<string> */
-    private array $parameters;
+    private string $parameters;
 
     public function __construct(
         string $filename,
         string $line,
         int $lineNumber,
-        string $visibility,
+        ?string $visibility,
         string $returnType,
         string $class,
         string $method,
-        string ...$parameters
+        string $parameters
     ) {
         parent::__construct($filename, $line, $lineNumber);
 
@@ -43,17 +42,17 @@ final class MethodDefinition extends SearchResult
 
     public static function fromLine(string $filename, array $line): self
     {
-        preg_match(self::PATTERN, $line['line'], $matches);
+        preg_match(self::PATTERN, $line['line'], $matches, PREG_UNMATCHED_AS_NULL);
 
         return new self(
             $filename,
             $line['line'],
             (int) $line['lineNumber'],
-            $matches['visibility'],
+            $matches['visibility'] ?? null,
             $matches['returnType'],
             $matches['className'],
             $matches['methodName'],
-            ...explode('|', $matches['parameters']),
+            $matches['parameters'],
         );
     }
 
@@ -77,7 +76,7 @@ final class MethodDefinition extends SearchResult
         return $this->method;
     }
 
-    public function getParameters(): array
+    public function getParameters(): string
     {
         return $this->parameters;
     }

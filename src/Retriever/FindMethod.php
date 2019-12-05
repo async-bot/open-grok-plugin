@@ -27,8 +27,9 @@ final class FindMethod
     public function retrieve(string $methodName): Promise
     {
         return call(function () use ($methodName) {
-            $methodName = str_replace('::', '+', $methodName);
-
+            $methodName = sprintf('"%s"', $methodName);
+var_dump(urlencode($methodName));
+var_dump(sprintf(self::SEARCH_URL, urlencode($methodName)));
             $response = yield $this->httpClient->requestJson(
                 sprintf(self::SEARCH_URL, urlencode($methodName)),
                 new SearchResultResponse(),
